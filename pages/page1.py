@@ -1,33 +1,43 @@
 import streamlit as st
-import time
-import numpy as np
+import datetime
+from tools.patternPredictor import PatternPredictor
 
-st.set_page_config(page_title="Page 1", page_icon="📈")
+# 페이지 설정
+st.set_page_config(page_title="Pattern Prediction", page_icon="📈")
 
-st.markdown("# Page 1")
+# 페이지 사이드바
 st.sidebar.header("Page 1")
-st.write(
-    """This demo illustrates a combination of plotting and animation with
-Streamlit. We're generating a bunch of random numbers in a loop for around
-5 seconds. Enjoy!"""
-)
+with st.sidebar:
+    today = datetime.datetime.now()
+    this_year = today.year
+    jan_1 = datetime.date(this_year, 1, 1)
+    dec_31 = datetime.date(this_year, 12, 31)
+    
+    with st.form("pattern_predictor"):
+        stockCode = st.text_input('Select the symbol of stock')
+        
+        d = st.date_input(
+        "Select the dates of the pattern",
+        (today - datetime.timedelta(days=14), today),
+        jan_1,
+        today,
+        format="MM.DD.YYYY",
+        )
 
-progress_bar = st.sidebar.progress(0)
-status_text = st.sidebar.empty()
-last_rows = np.random.randn(1, 1)
-chart = st.line_chart(last_rows)
+        window = st.slider('Select days to predict', 0, 30, 5)
 
-for i in range(1, 101):
-    new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-    status_text.text("%i%% Complete" % i)
-    chart.add_rows(new_rows)
-    progress_bar.progress(i)
-    last_rows = new_rows
-    time.sleep(0.05)
+        # Every form must have a submit button.
+        submitted = st.form_submit_button("Submit")
 
-progress_bar.empty()
-
-# Streamlit widgets automatically run the script from top to bottom. Since
-# this button is not connected to any other logic, it just causes a plain
-# rerun.
-st.button("Re-run")
+# 페이지 본문
+st.markdown("# Pattern Prediction")
+if submitted:
+    with st.spinner('Predicting...'):
+        pp = PatternPredictor()
+        pp.period = window
+        pp.getStockData(symbol=stockCode)
+        cosSimsList = pp.searchPattern(start_date=d[0], end_date=d[1])
+        meanList = pp.stat_prediction(results=cosSimsList)
+        fig = pp.plot_pattern(idx=cosSimsList.index[0])
+        st.pyplot(fig)
+    
