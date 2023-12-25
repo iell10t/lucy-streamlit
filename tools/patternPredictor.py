@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 class PatternPredictor():
     def __init__(self) -> None:
         pass
-    
+
     def getStockData(self, symbol: str):
         self.data = fdr.DataReader(symbol)
         self.close = self.data['Close']
