@@ -1,6 +1,6 @@
+bs4==0.0.1
 finance-datareader==0.9.66
 matplotlib==3.8.2
-mdurl==0.1.2
 numpy==1.26.2
 pandas==2.1.4
 streamlit==1.29.0
