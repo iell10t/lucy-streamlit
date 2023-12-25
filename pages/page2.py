@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 import numpy as np
-import matplotlib as plt
 
 st.set_page_config(page_title="Page 2", page_icon="📈")
 
