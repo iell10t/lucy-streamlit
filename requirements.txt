@@ -1,7 +1,8 @@
-bs4==0.0.1
+beautifulsoup4==4.12.2
 finance-datareader==0.9.66
 matplotlib==3.8.2
 numpy==1.26.2
 pandas==2.1.4
+plotly==5.18.0
 streamlit==1.29.0
 watchdog==3.0.0
