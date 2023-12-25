@@ -1,8 +1,8 @@
-import FinanceDataReader as fdr
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+import FinanceDataReader as fdr
 
 class PatternPredictor():
     def __init__(self) -> None:
