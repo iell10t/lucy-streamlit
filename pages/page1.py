@@ -33,4 +33,5 @@ if submitted:
         cosSimsList = pp.searchPattern(start_date=periodInput[0], end_date=periodInput[1])
         fig = pp.plotPattern(idx=cosSimsList.index[0], datesToPredict=datesToPredictInput)
         st.pyplot(fig)
+        st.write(f"The similar pattern shown above has a value of {cosSimsList.iloc[0].round(4)} which is the highest value of the cosine similarity between the reference stock price. The closer the value is to 1, the more similar it is.")
     
