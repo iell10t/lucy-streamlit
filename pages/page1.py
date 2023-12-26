@@ -3,41 +3,34 @@ import datetime
 from tools.patternPredictor import PatternPredictor
 
 # 페이지 설정
-st.set_page_config(page_title="Pattern Prediction", page_icon="📈")
+st.set_page_config(page_title="Stock Price Prediction (Patterns)", page_icon="📈")
 
 # 페이지 사이드바
-st.sidebar.header("Page 1")
+st.sidebar.header("Settings")
 with st.sidebar:
-    today = datetime.datetime.now()
-    this_year = today.year
-    jan_1 = datetime.date(this_year, 1, 1)
-    dec_31 = datetime.date(this_year, 12, 31)
-    
-    with st.form("pattern_predictor"):
-        stockCode = st.text_input('Select the symbol of stock')
+    with st.form("settings"):
+        symbolInput = st.text_input("Symbol of the stock", value="005930")
         
-        d = st.date_input(
-        "Select the dates of the pattern",
-        (today - datetime.timedelta(days=14), today),
-        jan_1,
+        today = datetime.datetime.now()
+        periodInput = st.date_input(
+        "Period of the pattern to search",
+        (today - datetime.timedelta(days=30), today),
+        datetime.date(today.year, 1, 1),
         today,
-        format="MM.DD.YYYY",
+        format="YYYY-MM-DD",
         )
 
-        window = st.slider('Select days to predict', 0, 30, 5)
+        datesToPredictInput = st.slider('Dates to predict', 0, 30, 10)
 
-        # Every form must have a submit button.
-        submitted = st.form_submit_button("Submit")
+        submitted = st.form_submit_button("Run")
 
 # 페이지 본문
-st.markdown("# Pattern Prediction")
+st.markdown("# Stock Price Prediction (by searching similar patterns)")
 if submitted:
-    with st.spinner('Predicting...'):
+    with st.spinner('Running...'):
         pp = PatternPredictor()
-        pp.period = window
-        pp.getStockData(symbol=stockCode)
-        cosSimsList = pp.searchPattern(start_date=d[0], end_date=d[1])
-        meanList = pp.stat_prediction(results=cosSimsList)
-        fig = pp.plot_pattern(idx=cosSimsList.index[0])
+        pp.getStockData(symbol=symbolInput)
+        cosSimsList = pp.searchPattern(start_date=periodInput[0], end_date=periodInput[1])
+        fig = pp.plotPattern(idx=cosSimsList.index[0], datesToPredict=datesToPredictInput)
         st.pyplot(fig)
     
