@@ -15,7 +15,7 @@ with st.sidebar:
         periodInput = st.date_input(
         label="Period of the pattern to search",
         value=(today - datetime.timedelta(days=30), today),
-        min_value= today - datetime.timedelta(days=365)
+        min_value= today - datetime.timedelta(days=365),
         max_value=today,
         format="YYYY-MM-DD",
         )
